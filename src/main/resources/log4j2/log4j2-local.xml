@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="WARN">  <!--status : 로그 프레임워크인 Log4j2 자체가 돌아가면서 남기는 로그의 수준을 결정하는 설정-->
+    <!--  프로퍼티 정보  -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%5p] [%15.15t] %-40.40c{1.} : %m%n%ex</Property>
+        <Property name="LOG_DIR">logs</Property>
+        <Property name="FILE_NAME">application-log4j2.log</Property>
+        <Property name="BACK_DIR">${LOG_DIR}/backups</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <RollingFile name="FileAppender"
+                     filename="${LOG_DIR}/${FILE_NAME}"
+                     filePattern="${BACK_DIR}/application-log4j2-%d{yyyy-MM-dd-HH}-%i.log.gz">  <!--.gz 확장자를 붙여 알아서 압축-->
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <TimeBasedTriggeringPolicy interval="7"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10">
+                <Delete basePath="${BACK_DIR}">      <!--삭제 정책 : 30일이 지난 파일-->
+                    <IfLastModified age="30d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="co.kr.comm" level="debug" additivity="false">
+            <AppenderRef ref="FileAppender"/>
+        </Logger>
+        <Logger name="org.springframework.boot" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="ConsoleAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>
