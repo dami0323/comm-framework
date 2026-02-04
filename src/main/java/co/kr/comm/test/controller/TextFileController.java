@@ -39,8 +39,7 @@ public class TextFileController {
 	public String readFileLines(@RequestParam("path") String path) {
 		try {
 			List<String> lines = textFileService.readFileLines(path);
-			String content = String.join("\n", lines);
-			return content.replace("\n", "<br>");
+            return String.join("\n", lines);
 		} catch (IOException e) {
 			return "";
 		}
