@@ -14,32 +14,41 @@
         </Console>
         <RollingFile name="FileAppender"
                      filename="${LOG_DIR}/${FILE_NAME}"
-                     filePattern="${BACK_DIR}/application-log4j2-%d{yyyy-MM-dd-HH-mm-ss}-%i.log.gz">  <!--.gz 확장자를 붙여 알아서 압축-->
+                     filePattern="${BACK_DIR}/application-log4j2-%d{yyyy-MM-dd}-%i.log.gz">  <!--.gz 확장자를 붙여 알아서 압축-->
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
             <Policies>
-                <SizeBasedTriggeringPolicy size="10KB"/>
-                <TimeBasedTriggeringPolicy interval="20"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+                <TimeBasedTriggeringPolicy interval="7"/>
             </Policies>
             <DefaultRolloverStrategy max="10">
                 <Delete basePath="${BACK_DIR}">      <!--삭제 정책 : 30일이 지난 파일-->
-                    <IfLastModified age="30s"/>
+                    <IfLastModified age="30d"/>
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>
+
+        <!--비동기 설정-->
+        <Async name="AsyncConsoleAppender">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Async>
+        <Async name="AsyncFileAppender">
+            <AppenderRef ref="FileAppender"/>
+        </Async>
     </Appenders>
 
     <Loggers>
         <Logger name="co.kr.comm" level="debug" additivity="false">
-            <AppenderRef ref="FileAppender"/>
+            <AppenderRef ref="AsyncFileAppender"/>
+            <AppenderRef ref="AsyncConsoleAppender"/>
         </Logger>
         <Logger name="org.springframework.boot" level="info" additivity="false">
-            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="AsyncConsoleAppender"/>
         </Logger>
         <Root level="info">
-            <AppenderRef ref="FileAppender"/>
-            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="AsyncFileAppender"/>
+            <AppenderRef ref="AsyncConsoleAppender"/>
         </Root>
     </Loggers>
 </Configuration>
