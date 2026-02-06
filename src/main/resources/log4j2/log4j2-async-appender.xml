@@ -28,19 +28,27 @@
                 </Delete>
             </DefaultRolloverStrategy>
         </RollingFile>
+
+        <!--비동기 설정-->
+        <Async name="AsyncConsoleAppender">
+            <AppenderRef ref="ConsoleAppender"/>
+        </Async>
+        <Async name="AsyncFileAppender">
+            <AppenderRef ref="FileAppender"/>
+        </Async>
     </Appenders>
 
     <Loggers>
         <Logger name="co.kr.comm" level="debug" additivity="false">
-            <AppenderRef ref="FileAppender"/>
-            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="AsyncFileAppender"/>
+            <AppenderRef ref="AsyncConsoleAppender"/>
         </Logger>
         <Logger name="org.springframework.boot" level="info" additivity="false">
-            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="AsyncConsoleAppender"/>
         </Logger>
         <Root level="info">
-            <AppenderRef ref="FileAppender"/>
-            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="AsyncFileAppender"/>
+            <AppenderRef ref="AsyncConsoleAppender"/>
         </Root>
     </Loggers>
 </Configuration>

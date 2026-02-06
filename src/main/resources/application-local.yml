@@ -7,3 +7,5 @@ server:
 #  file:
 #    path: logs
 #    name: "logs/comm.log"
+#logging:
+#  config: classpath:log4j2/log4j2-async-appender.xml
