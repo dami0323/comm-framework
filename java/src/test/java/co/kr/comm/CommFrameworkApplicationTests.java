@@ -41,7 +41,7 @@ class CommFrameworkApplicationTests {
         }
         // HikariCP, Tomcat JDBC 등 커넥션 풀별 상세 정보 출력 (가능한 경우)
 //		if (dataSource.getClass().getName().contains("HikariDataSource")) {
-//			com.zaxxer.hikari.HikariDataSource hikari = (com.zaxxer.hikari.HikariDataSource) dataSource;
+//			HikariDataSource hikari = (HikariDataSource) dataSource;
 //			log.info("[HikariCP] poolName={}, maxPoolSize={}, minIdle={}",
 //					hikari.getPoolName(), hikari.getMaximumPoolSize(), hikari.getMinimumIdle());
 //		}

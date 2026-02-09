@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- 프로퍼티 정보 -->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%5level] [%15.15thread] %-40.40logger{1} : %msg%n%ex"/>
+    <property name="LOG_DIR" value="logs"/>
+    <property name="FILE_NAME" value="application-logback.log"/>
+    <property name="DB_FILE_NAME" value="db-logback.log"/>
+    <property name="BACK_DIR" value="${LOG_DIR}/backups"/>
+
+    <!-- Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${FILE_NAME}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${BACK_DIR}/application-log4j2-%d{yyyy-MM-dd-HH-mm-ss}-%i.log.gz
+            </fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <maxFileSize>10MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="DB_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/${DB_FILE_NAME}</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${BACK_DIR}/db-log4j2-%d{yyyy-MM-dd-HH-mm-ss}-%i.log.gz
+            </fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <maxFileSize>50MB</maxFileSize>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Async 설정 -->
+    <appender name="ASYNC_DB_LOG" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="DB_FILE"/>
+    </appender>
+
+    <!-- DB 로그 -->
+    <logger name="org.hibernate" level="INFO" additivity="false">
+        <appender-ref ref="ASYNC_DB_LOG"/>
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- 어플리케이션 로그 -->
+    <logger name="co.kr.comm" level="DEBUG" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="org.springframework.boot" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
