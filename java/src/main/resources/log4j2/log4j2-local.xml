@@ -14,7 +14,7 @@
         </Console>
         <RollingFile name="FileAppender"
                      filename="${LOG_DIR}/${FILE_NAME}"
-                     filePattern="${BACK_DIR}/application-log4j2-%d{yyyy-MM-dd}-%i.log.gz">  <!--.gz 확장자를 붙여 알아서 압축-->
+                     filePattern="${BACK_DIR}/application-log4j2-%d{yyyy-MM-dd-HH}-%i.log.gz">  <!--.gz 확장자를 붙여 알아서 압축-->
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -33,7 +33,6 @@
     <Loggers>
         <Logger name="co.kr.comm" level="debug" additivity="false">
             <AppenderRef ref="FileAppender"/>
-            <AppenderRef ref="ConsoleAppender"/>
         </Logger>
         <Logger name="org.springframework.boot" level="info" additivity="false">
             <AppenderRef ref="ConsoleAppender"/>
